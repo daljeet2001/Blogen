@@ -20,6 +20,7 @@ model Tenant {
   name      String
   users     UserTenant[]
   invites   Invite[]   
+  contents  Content[]
   createdAt DateTime @default(now())
 }
 
@@ -55,6 +56,18 @@ model Invite {
   createdAt DateTime @default(now())
   tenant    Tenant   @relation(fields: [tenantId], references: [id])
 }
+
+
+model Content {
+  id        String   @id @default(cuid())
+  tenantId  String
+  title     String
+  inputText String
+  outputs   Json
+  createdAt DateTime @default(now())
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+}
+
 
 
 

@@ -1,31 +1,23 @@
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import { NextRequest } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { tenantId: string } } 
-) {
-  const { params } = context;
-  const tenantId = params.tenantId; 
-
+export async function GET(req: Request, { params }: { params: { tenantId: string } }) {
   const session = await getServerSession(authOptions);
   if (!session) return new Response("Unauthorized", { status: 401 });
 
-  // Ensure user belongs to tenant
+  const { tenantId } = params;
+
   const userTenant = await prisma.userTenant.findFirst({
     where: { tenantId, userId: session.user.id },
   });
   if (!userTenant) return new Response("Forbidden", { status: 403 });
 
-  const members = await prisma.userTenant.findMany({
+  const contents = await prisma.content.findMany({
     where: { tenantId },
-    include: { user: true },
+    orderBy: { createdAt: "desc" },
   });
 
-  return new Response(JSON.stringify(members), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return new Response(JSON.stringify(contents));
 }
 

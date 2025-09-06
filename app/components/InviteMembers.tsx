@@ -9,28 +9,44 @@ export default function InviteMembers({ tenantId }: { tenantId: string }) {
   const sendInvite = async () => {
     if (!email) return alert("Enter email");
     setLoading(true);
-    const res = await fetch("/api/invite", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, tenantId, role }),
-    });
-    const data = await res.json();
-    alert(`Invite created for ${data.email}`);
-    setEmail("");
-    setLoading(false);
+
+    try {
+      const res = await fetch("/api/invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, tenantId, role }),
+      });
+
+      if (!res.ok) {
+        // API sent back an error message (string or JSON)
+        const text = await res.text();
+        alert(text || "Something went wrong");
+        return;
+      }
+
+      const data = await res.json();
+      alert(`✅ Invite created for ${data.email}`);
+      setEmail("");
+    } catch (err) {
+      console.error(err);
+      alert("Server error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <>
     <div className="bg-white p-6 rounded shadow max-w-md">
       <h2 className="text-xl font-bold mb-4">Invite Members</h2>
-      <input type="email"
+      <input
+        type="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="border p-2 rounded w-full mb-2"
       />
-      <select value={role}
+      <select
+        value={role}
         onChange={(e) => setRole(e.target.value)}
         className="border p-2 rounded w-full mb-4"
       >
@@ -38,14 +54,13 @@ export default function InviteMembers({ tenantId }: { tenantId: string }) {
         <option value="EDITOR">Editor</option>
         <option value="VIEWER">Viewer</option>
       </select>
-      <button onClick={sendInvite}
+      <button
+        onClick={sendInvite}
         className="bg-blue-500 text-white p-2 rounded"
         disabled={loading}
       >
         {loading ? "Sending..." : "Send Invite"}
       </button>
     </div>
-    </>
   );
 }
-
