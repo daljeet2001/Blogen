@@ -1,22 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Eye } from "lucide-react";
+import { useRouter } from "next/navigation"; // ✅ use router for navigation
+
+interface UserTenant {
+  id: string;
+  userId: string;
+  tenantId: string;
+  role: "ADMIN" | "EDITOR" | "VIEWER";
+}
 
 interface Tenant {
   id: string;
   name: string;
   createdAt: string;
-  role: "ADMIN" | "EDITOR" | "VIEWER";
+  users: UserTenant[];
 }
 
-export default function AllTenants({
-  onSelectTenant,
-}: {
-  onSelectTenant: (id: string, name: string) => void;
-}) {
+export default function AllTenants() {
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter(); // ✅ hook
 
   useEffect(() => {
     const fetchTenants = async () => {
@@ -33,34 +37,32 @@ export default function AllTenants({
   if (loading) return <p className="text-gray-500">Loading tenants...</p>;
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6">
+    <div className="p-6">
       <h2 className="text-xl font-semibold mb-4">All Tenants</h2>
 
       {tenants.length === 0 ? (
         <p className="text-gray-500">No tenants found.</p>
       ) : (
-        <ul className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {tenants.map((tenant) => (
-            <li
+            <div
               key={tenant.id}
-              className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
+              onClick={() =>
+                router.push(`/tenant/${tenant.id}?name=${encodeURIComponent(tenant.name)}`)
+              }
+              className="bg-gray-900 text-white rounded-lg p-8 cursor-pointer hover:bg-gray-800 transition"
             >
-              <div>
-                <p className="font-medium">{tenant.name}</p>
-                <p className="text-sm text-gray-500">
-                  Role: {tenant.role} | Created:{" "}
-                  {new Date(tenant.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-              <button
-                onClick={() => onSelectTenant(tenant.id, tenant.name)}
-                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
-              >
-                <Eye className="w-4 h-4" />
-              </button>
-            </li>
+              <h3 className="text-lg font-medium mb-2">{tenant.name}</h3>
+              <p className="text-sm text-gray-400">
+                {tenant.users && tenant.users.length > 0
+                  ? `${tenant.users.length} member${
+                      tenant.users.length > 1 ? "s" : ""
+                    }`
+                  : "no members"}
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

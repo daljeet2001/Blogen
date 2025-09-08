@@ -26,39 +26,32 @@ export default function LoginPage() {
     <div className="flex flex-col items-center justify-center">
 
       <div className="w-full max-w-md  p-8 ">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Welcome back</h2>
+        <h2 className="text-2xl font-bold mb-6">Welcome back</h2>
 
         <form onSubmit={submit} className="space-y-4">
           {/* Email */}
-          <input
-            type="text"
-            placeholder="Email or mobile number"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0D1164]"
-          />
+   <input
+  type="text"
+  placeholder="Email or mobile number"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  className="w-full rounded-xl border border-gray-600 bg-black text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500"
+/>
 
-          {/* Password */}
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0D1164]"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-3 flex items-center text-gray-500"
-            >
-         
-            </button>
-          </div>
+<div className="relative">
+  <input
+    type={showPassword ? "text" : "password"}
+    placeholder="Password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    className="w-full rounded-xl border border-gray-600 bg-black text-white px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-gray-500"
+/>
+</div>
+
 
           {/* Forgot password */}
           <div className="text-sm">
-            <Link href="/auth/forgot" className="text-[#0D1164] font-medium underline cursor-not-allowed">
+            <Link href="/auth/forgot" className="text-white font-medium underline cursor-not-allowed">
               Forgot my password
             </Link>
           </div>
@@ -66,7 +59,7 @@ export default function LoginPage() {
           {/* Submit */}
           <button
             disabled={loading}
-            className="w-full rounded-full bg-[#0D1164] text-white py-3 font-semibold hover:bg-opacity-90 transition"
+            className="w-full rounded-full bg-[#2563EB] text-white py-3 font-semibold hover:bg-[#1D4ED8] transition"
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
@@ -75,7 +68,7 @@ export default function LoginPage() {
         {/* Register link */}
         <div className="text-center text-sm mt-6">
           <span className="text-gray-600">Don’t have an account? </span>
-          <Link href="/auth/signup" className="text-[#0D1164] font-medium underline">
+          <Link href="/auth/signup" className="text-white font-medium underline">
             Create one
           </Link>
         </div>

@@ -14,7 +14,11 @@ export async function GET() {
     const tenants = await prisma.userTenant.findMany({
       where: { userId: session.user.id },
       include: {
-        tenant: true,
+        tenant: {
+          include: {
+            users: true, 
+          },
+        },
       },
     });
 
@@ -24,6 +28,7 @@ export async function GET() {
       name: ut.tenant.name,
       createdAt: ut.tenant.createdAt,
       role: ut.role,
+      users: ut.tenant.users, 
     }));
 
     return NextResponse.json(data);

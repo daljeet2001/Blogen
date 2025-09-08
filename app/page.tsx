@@ -1,6 +1,24 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+
+export default function Landing() {
+
+    const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.replace('/dashboard'); 
+    }
+  }, [status, router]);
+
+  if (status === 'loading') {
+    return <div>Loading...</div>; 
+  }
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">

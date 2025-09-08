@@ -61,7 +61,6 @@ model Invite {
 model Content {
   id        String   @id @default(cuid())
   tenantId  String
-  title     String
   inputText String
   outputs   Json
   createdAt DateTime @default(now())

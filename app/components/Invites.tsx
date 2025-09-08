@@ -51,25 +51,24 @@ export default function Invites() {
   if (loading) return <p>Loading invites...</p>;
 
   if (invites.length === 0) {
-    return <p>No pending invites 🎉</p>;
+    return <p>No pending invites.</p>;
   }
 
   return (
-    <div className="bg-white p-6 rounded shadow max-w-lg mt-6">
-      <h2 className="text-xl font-bold mb-4">Your Invites</h2>
+    <div className="p-6 rounded  max-w-lg mt-6">
+      {/* <h2 className="text-xl font-bold mb-4">Your Invites</h2> */}
       <ul>
         {invites.map((invite) => (
           <li
             key={invite.id}
-            className="flex justify-between items-center border-b py-2"
+            className="flex justify-between items-center py-2"
           >
             <div>
               <p className="font-medium">{invite.tenant.name}</p>
-              <p className="text-sm text-gray-500">Role: {invite.role}</p>
             </div>
             <button
               onClick={() => acceptInvite(invite.token)}
-              className="bg-green-500 text-white px-3 py-1 rounded"
+              className="flex items-center text-black bg-gray-100 hover:bg-gray-200 border px-3 py-1.5 rounded-full text-sm"
             >
               Accept
             </button>
