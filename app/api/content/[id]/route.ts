@@ -9,7 +9,7 @@ type RouteParams<T extends string> = { params: Record<T, string> };
 // Example DELETE
 export async function DELETE(
   req: NextRequest,
-  { params }: RouteParams<"id">
+  { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
   if (!session) return new Response("Unauthorized", { status: 401 });
@@ -27,8 +27,9 @@ export async function DELETE(
 // Example PUT
 export async function PUT(
   req: NextRequest,
-  { params }: RouteParams<"id">
+  { params }: { params: { id: string } }
 ) {
+ 
   const session = await getServerSession(authOptions);
   if (!session) return new Response("Unauthorized", { status: 401 });
 
