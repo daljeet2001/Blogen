@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { X, Check } from "lucide-react";
+import { Toast } from './Toast';
+import { ToastSuccess } from './Toast';
 
 export default function InviteMembers({
   tenantId,
@@ -27,17 +29,18 @@ export default function InviteMembers({
 
       if (!res.ok) {
         const text = await res.text();
-        alert(text || "Something went wrong");
+     
+        Toast(text || "Something went wrong");
         return;
       }
 
       const data = await res.json();
-      alert(`✅ Invite created for ${data.email}`);
+      ToastSuccess(`Invite created for ${data.email}`);
       setEmail("");
       onClose();
     } catch (err) {
       console.error(err);
-      alert("Server error");
+      Toast("Server error");
     } finally {
       setLoading(false);
     }

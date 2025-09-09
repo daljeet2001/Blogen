@@ -22,17 +22,31 @@ export default function AllTenants() {
   const [loading, setLoading] = useState(true);
   const router = useRouter(); // ✅ hook
 
-  useEffect(() => {
-    const fetchTenants = async () => {
+useEffect(() => {
+  const fetchTenants = async () => {
+    try {
       const res = await fetch("/api/tenants");
       if (res.ok) {
         const data = await res.json();
         setTenants(data);
       }
+    } catch (err) {
+      console.error("Error fetching tenants:", err);
+    } finally {
       setLoading(false);
-    };
-    fetchTenants();
-  }, []);
+    }
+  };
+
+  // initial fetch
+  fetchTenants();
+
+  // poll every 3s
+  const interval = setInterval(fetchTenants, 2000);
+
+  // cleanup on unmount
+  return () => clearInterval(interval);
+}, []);
+
 
   if (loading) return <p className="text-gray-500">Loading tenants...</p>;
 

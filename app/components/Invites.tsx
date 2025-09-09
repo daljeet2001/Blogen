@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import { Toast } from './Toast';
+import { ToastSuccess } from './Toast';
 
 type Invite = {
   id: string;
@@ -36,15 +38,15 @@ export default function Invites() {
         body: JSON.stringify({ token }),
       });
       if (res.ok) {
-        alert("Invite accepted!");
+        ToastSuccess("Invite accepted!");
         setInvites((prev) => prev.filter((i) => i.token !== token));
       } else {
         const err = await res.json();
-        alert(err.error || "Failed to accept invite");
+        Toast(err.error || "Failed to accept invite");
       }
     } catch (error) {
       console.error(error);
-      alert("Error accepting invite");
+      Toast("Error accepting invite");
     }
   };
 

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Toast } from '../../components/Toast';
 
 
 export default function LoginPage() {
@@ -19,7 +20,8 @@ export default function LoginPage() {
     const res = await signIn('credentials', { redirect: false, email, password });
     setLoading(false);
     if (res?.ok) router.push('/dashboard');
-    else alert('Invalid credentials');
+    else 
+      Toast('Invalid credentials. Please try again.');
   };
 
   return (

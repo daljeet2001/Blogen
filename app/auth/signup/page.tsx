@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Toast } from '../../components/Toast';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,18 +16,19 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
 
-    const res = await fetch('/api/auth/register', {
+    const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password }),
     });
 
-    if (res.ok) {
-      router.push('/auth/signin');
-    } else {
-      const err = await res.json();
-      alert(err.error || 'Registration failed');
-    }
+if (res.ok) {
+  router.push('/auth/signin');
+} else {
+  const err = await res.json();
+  Toast(err.error || 'Registration failed. Please try again.');
+}
+
     setLoading(false);
   };
 

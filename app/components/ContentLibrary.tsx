@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Clipboard, Check, Trash2, Edit3, Save } from "lucide-react";
+import { Toast } from './Toast';
 
 type ContentItem = {
   id: string;
@@ -38,7 +39,7 @@ export default function ContentLibrary({ tenantId }: { tenantId: string }) {
     if (res.ok) {
       setItems((prev) => prev.filter((item) => item.id !== id));
     } else {
-      alert("Permission denied or error deleting content");
+      Toast("Permission denied or error deleting content");
     }
   };
 
@@ -71,7 +72,7 @@ export default function ContentLibrary({ tenantId }: { tenantId: string }) {
       setEditing(null);
       setEditValue("");
     } else {
-      alert("Permission denied or error updating content");
+      Toast("Permission denied or error updating content");
     }
   };
 

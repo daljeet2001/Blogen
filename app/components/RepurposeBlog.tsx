@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { Send, Clipboard, Check } from "lucide-react";
+import { Toast } from "./Toast";
 
 type OutputItem = {
   platform: "linkedin" | "twitter" | "facebook";
@@ -42,7 +43,7 @@ export default function RepurposeBlog({ tenantId }: { tenantId: string }) {
 
       if (!res.ok) {
         const errorText = await res.text();
-        alert(errorText || "Something went wrong");
+        Toast(errorText || "Something went wrong");
         return;
       }
 
@@ -57,7 +58,7 @@ export default function RepurposeBlog({ tenantId }: { tenantId: string }) {
 
       setBlogText("");
     } catch (err: any) {
-      alert(err.message || "Something went wrong");
+      Toast(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -100,9 +101,9 @@ export default function RepurposeBlog({ tenantId }: { tenantId: string }) {
           </div>
         </div>
       ) : (
-        // After outputs appear
+        // Outputs + Fixed Input
         <>
-          {/* Outputs area */}
+          {/* Outputs scrollable area */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {outputs.map((out, idx) => (
               <div
@@ -135,8 +136,8 @@ export default function RepurposeBlog({ tenantId }: { tenantId: string }) {
             <div ref={outputsEndRef} />
           </div>
 
-          {/* Input docked at bottom */}
-          <div className="border-t border-gray-700 p-4">
+          {/* Input stays fixed at bottom */}
+          <div className="border-t border-gray-700 p-4 shrink-0">
             <div className="flex items-end bg-gray-900 rounded-xl px-3 py-2">
               <textarea
                 ref={textareaRef}
@@ -164,4 +165,3 @@ export default function RepurposeBlog({ tenantId }: { tenantId: string }) {
     </div>
   );
 }
-
