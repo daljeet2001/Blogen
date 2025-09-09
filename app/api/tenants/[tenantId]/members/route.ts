@@ -1,14 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  context: { params: { tenantId: string } } 
+  { params }: { params: { tenantId: string } }
 ) {
-  const { params } = context;
-  const tenantId = params.tenantId; 
+  const { tenantId } = params;
 
   const session = await getServerSession(authOptions);
   if (!session) return new Response("Unauthorized", { status: 401 });
@@ -28,4 +27,3 @@ export async function GET(
     headers: { "Content-Type": "application/json" },
   });
 }
-
