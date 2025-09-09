@@ -5,12 +5,10 @@ import type { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { tenantId: string } }
-) {
+ context: any) {
+  const { tenantId } = context.params; 
   const session = await getServerSession(authOptions);
   if (!session) return new Response("Unauthorized", { status: 401 });
-
-  const { tenantId } = params;
 
   const userTenant = await prisma.userTenant.findFirst({
     where: { tenantId, userId: session.user.id },

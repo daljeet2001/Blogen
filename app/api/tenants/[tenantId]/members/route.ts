@@ -5,10 +5,8 @@ import type { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { tenantId: string } }
-) {
-  const { tenantId } = params;
-
+context: any) {
+  const { tenantId } = context.params; 
   const session = await getServerSession(authOptions);
   if (!session) return new Response("Unauthorized", { status: 401 });
 

@@ -9,12 +9,10 @@ type RouteParams<T extends string> = { params: Record<T, string> };
 // Example DELETE
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  context: any) {
+  const { id } = context.params; 
   const session = await getServerSession(authOptions);
   if (!session) return new Response("Unauthorized", { status: 401 });
-
-  const { id } = params;
 
   const content = await prisma.content.findUnique({ where: { id } });
   if (!content) return new Response("Not found", { status: 404 });
@@ -27,13 +25,10 @@ export async function DELETE(
 // Example PUT
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
- 
+context: any) {
+  const { id } = context.params; 
   const session = await getServerSession(authOptions);
   if (!session) return new Response("Unauthorized", { status: 401 });
-
-  const { id } = params;
   const body = await req.json();
   const { platform, text } = body as { platform: string; text: string };
 
