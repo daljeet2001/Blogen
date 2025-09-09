@@ -41,33 +41,27 @@ export async function PUT(
 
   const { id } = params;
   const body = await req.json();
-  const { platform, text } = body;
+  const { platform, text } = body as { platform: string; text: string };
 
   if (!platform || !text) {
     return new Response("Missing platform or text", { status: 400 });
   }
 
-  // Find content first
-  const content = await prisma.content.findUnique({
-    where: { id },
-  });
+  const content = await prisma.content.findUnique({ where: { id } });
   if (!content) return new Response("Not found", { status: 404 });
 
-  // Check if user is part of tenant
   const userTenant = await prisma.userTenant.findFirst({
     where: { tenantId: content.tenantId, userId: session.user.id },
   });
   if (!userTenant) return new Response("Forbidden", { status: 403 });
 
-  // Only allow Admins and Editors
   if (!["ADMIN", "EDITOR"].includes(userTenant.role)) {
     return new Response("Forbidden", { status: 403 });
   }
 
-  // Safely cast outputs to Record<string, any>
-  const currentOutputs = (content.outputs || {}) as Record<string, any>;
-  console.log("Current Outputs:", currentOutputs);
-  // Update JSON field
+  type Outputs = Record<string, string>;
+  const currentOutputs = (content.outputs || {}) as Outputs;
+
   const updated = await prisma.content.update({
     where: { id },
     data: {
@@ -77,7 +71,7 @@ export async function PUT(
       },
     },
   });
-  console.log("Updated Content:", updated);
 
   return new Response(JSON.stringify(updated));
 }
+
